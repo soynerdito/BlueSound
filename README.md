@@ -3,4 +3,4 @@ Android application to redirect audio to Bluetooth headset. Some Bluetooth enabl
 
 
 ScreenShots
-![alt tag](https://raw.github.com/soynerdito/BlueSound/master/Screenshots/App_off.png)
+![alt tag](https://raw.github.com/soynerdito/BlueSound/master/Screenshots/App_off_thumb.png)

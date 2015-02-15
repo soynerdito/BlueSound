@@ -5,40 +5,43 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 public class MainActivity extends ActionBarActivity {
-
+	private boolean mAudioON = false;
+	private final String AUDIO_STATUS = "AUDIO_STATUS";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	}
-	
-	private void enableView( int resId, boolean enabled ){
-		this.findViewById(resId).setEnabled(enabled);	
 		
-	}
-	
-	public void onStreamClick(View view){		
-		
-		boolean isOFF = (view.getTag() !=null)?(boolean)view.getTag():true;		
-		if( !isOFF ){
-			//It is ON
-			view.setTag( true );
-			BluetoothManager.streamAudioStop(getApplicationContext());
-			view.setBackground(getResources().getDrawable(R.drawable.ic_audio_on));			
-		}else{
-			//It is OFF
-			view.setTag( false );
-			BluetoothManager.streamAudioStart(getApplicationContext());
-			view.setBackground(getResources().getDrawable(R.drawable.ic_audio_off));
+		if( savedInstanceState != null ){
+			mAudioON = savedInstanceState.getBoolean( AUDIO_STATUS );
 		}
-		
-		//		
-		//enableView(R.id.btnAudioON, true);
-		//enableView(R.id.btnAudioOFF, false);
+		refreshButtonImage(findViewById(R.id.btnAudioON));
 	}
 	
-	public void onStreamOn(View view){
-		BluetoothManager.streamAudioStart(getApplicationContext());
-		enableView(R.id.btnAudioON, false);
+	private void refreshButtonImage(View view){
+		view.setBackground(getResources().getDrawable(
+				(mAudioON?R.drawable.ic_audio_off:R.drawable.ic_audio_on)
+				));	
 	}
+	
+	public void onStreamClick(View view){				
+		if( mAudioON ){
+			//Turn Audio Off
+			BluetoothManager.streamAudioStop(getApplicationContext());
+		}else{
+			//Turn Audio ON
+			BluetoothManager.streamAudioStart(getApplicationContext());
+		}
+		//Toggle audio flag
+		mAudioON = !mAudioON;
+		refreshButtonImage(view);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(AUDIO_STATUS, mAudioON );
+		super.onSaveInstanceState(outState);
+	}
+	
 }

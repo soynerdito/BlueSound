@@ -16,6 +16,11 @@ gen/
 .gradle/
 build/
 
+#Eclise
+lint.xml
+proguard-project.txt
+project.properties
+
 # Local configuration file (sdk path, etc)
 local.properties
 

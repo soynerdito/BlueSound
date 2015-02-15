@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+       <string name="app_name">SonidoAzul</string>
+    <string name="action_settings">Configuracion</string>
+    <string name="main_text">Sin anuncios, solo baja calidad de audio mono</string>
+</resources>

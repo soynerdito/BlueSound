@@ -1,5 +1,11 @@
 package com.soyblue.bluesound;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -7,6 +13,33 @@ import android.view.View;
 public class MainActivity extends ActionBarActivity {
 	private boolean mAudioON = false;
 	private final String AUDIO_STATUS = "AUDIO_STATUS";
+	
+	//The BroadcastReceiver that listens for Bluetooth broadcasts
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	        String action = intent.getAction();
+	        //BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+	            //Device found
+	        }
+	        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+	           //Device is now connected
+	        }
+	        else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+	           //Done searching
+	        }
+	        else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+	           //Device is about to disconnect
+	        }
+	        else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+	           //Device has disconnected
+	        	stopAudio();
+	        	refreshButtonImage();
+	        }           
+	    }
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +49,23 @@ public class MainActivity extends ActionBarActivity {
 		if( savedInstanceState != null ){
 			mAudioON = savedInstanceState.getBoolean( AUDIO_STATUS );
 		}
+		refreshButtonImage();
+		
+		//Register Intent Filter to identify when bluetooth device is disconnected
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+	    filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+	    filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED );
+	    filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED );
+	    filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED );	    
+	    		
+	    registerReceiver(mReceiver, filter);
+		
+	}
+	
+	private void refreshButtonImage(){
 		refreshButtonImage(findViewById(R.id.btnAudioON));
 	}
 	
@@ -25,16 +75,28 @@ public class MainActivity extends ActionBarActivity {
 				));	
 	}
 	
-	public void onStreamClick(View view){				
+	protected void stopAudio(){
+		BluetoothManager.streamAudioStop(getApplicationContext());
+		mAudioON = false;
+	}
+	
+	protected void startAudio(){
+		BluetoothManager.streamAudioStart(getApplicationContext());
+		mAudioON = true;
+	}
+	
+	protected void toggleAudioStatus(){
 		if( mAudioON ){
 			//Turn Audio Off
-			BluetoothManager.streamAudioStop(getApplicationContext());
+			stopAudio();
 		}else{
 			//Turn Audio ON
-			BluetoothManager.streamAudioStart(getApplicationContext());
+			startAudio();
 		}
-		//Toggle audio flag
-		mAudioON = !mAudioON;
+	}
+	
+	public void onStreamClick(View view){				
+		toggleAudioStatus();
 		refreshButtonImage(view);
 	}
 
@@ -43,5 +105,6 @@ public class MainActivity extends ActionBarActivity {
 		outState.putBoolean(AUDIO_STATUS, mAudioON );
 		super.onSaveInstanceState(outState);
 	}
+	
 	
 }

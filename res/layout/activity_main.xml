@@ -13,10 +13,52 @@
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.50"
+        android:layout_height="wrap_content"
         android:text="@string/main_text"
         android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/imageButtonBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSoundBack"
+            style="@android:style/MediaButton.Previous"
+            android:tint="@color/primary"           
+            android:src="@android:drawable/ic_media_previous" />
+
+        <ImageButton
+            android:id="@+id/imageButtonStop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSoundStop"
+            android:tint="@color/primary"
+            style="@android:style/MediaButton.Pause" />
+
+        <ImageButton
+            android:id="@+id/imageButtonPlay"
+            style="@android:style/MediaButton.Play"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:onClick="onSoundPlay"
+            android:tint="@color/primary" />
+
+        <ImageButton
+            android:id="@+id/imageButtonNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSoundNext"
+            android:tint="@color/primary"
+            style="@android:style/MediaButton.Next" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnAudioON"
@@ -24,7 +66,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="16dp"
-        android:layout_weight="0.91"
+        android:layout_weight="1"
         android:background="@drawable/ic_audio_on"
         android:minHeight="100dip"
         android:minWidth="100dip"

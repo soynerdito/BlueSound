@@ -16,11 +16,13 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <!-- Actionbar color -->
-	    <item name="colorPrimary">@color/colorPrimary</item>
+	    <item name="colorPrimary">@color/primary</item>
 	    <!--Status bar color-->
-	    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-	    <!--Window color-->
-	    <item name="android:windowBackground">@color/windowBackground</item>
+	    <item name="colorPrimaryDark">@color/primary_dark</item>
+	    <!--Window color -->
+	    <item name="android:windowBackground">@color/primary_light</item>
+	    
+	    <item name="android:colorAccent">@color/accent</item>
     </style>
 
 </resources>

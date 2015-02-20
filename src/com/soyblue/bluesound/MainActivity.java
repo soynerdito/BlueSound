@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.View;
 
 public class MainActivity extends ActionBarActivity {
@@ -94,6 +95,32 @@ public class MainActivity extends ActionBarActivity {
 			startAudio();
 		}
 	}
+	
+	private void broadcastKey( int key ){
+		Intent mbIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);  
+        //KeyEvent  
+        KeyEvent keyEvent = new KeyEvent (KeyEvent.ACTION_DOWN, key ) ;  
+        //mbIntent  
+        mbIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);  
+        sendBroadcast(mbIntent);
+	}
+	
+	public void onSoundStop(View view ) {		 
+		broadcastKey( KeyEvent.KEYCODE_MEDIA_PAUSE );
+	}
+	
+	public void onSoundPlay(View view ) {
+		broadcastKey( KeyEvent.KEYCODE_MEDIA_PLAY );
+	}
+
+	public void onSoundBack(View view ) {
+		broadcastKey( KeyEvent.KEYCODE_MEDIA_PREVIOUS );
+	}
+
+	public void onSoundNext(View view ) {
+		broadcastKey( KeyEvent.KEYCODE_MEDIA_NEXT );
+	}
+    
 	
 	public void onStreamClick(View view){				
 		toggleAudioStatus();

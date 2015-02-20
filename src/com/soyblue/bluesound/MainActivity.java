@@ -1,5 +1,6 @@
 package com.soyblue.bluesound;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -34,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
 				if( localAudioManager != null ){ 
 					localAudioManager.setMode(AudioManager.MODE_IN_CALL);
 				}
+				refreshButtonImage();
 	        }
 	        else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 	           //Done searching
@@ -77,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
 		refreshButtonImage(findViewById(R.id.btnAudioON));
 	}
 	
+	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	private void refreshButtonImage(View view){		
 		

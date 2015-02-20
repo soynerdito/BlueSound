@@ -6,10 +6,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	private boolean mAudioON = false;
@@ -24,9 +27,13 @@ public class MainActivity extends ActionBarActivity {
 
 	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 	            //Device found
-	        }
-	        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+	        }else if ( mAudioON && BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {	        	
 	           //Device is now connected
+	        	AudioManager localAudioManager = (AudioManager) context
+						.getSystemService(Context.AUDIO_SERVICE);
+				if( localAudioManager != null ){ 
+					localAudioManager.setMode(AudioManager.MODE_IN_CALL);
+				}
 	        }
 	        else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 	           //Done searching
@@ -70,10 +77,20 @@ public class MainActivity extends ActionBarActivity {
 		refreshButtonImage(findViewById(R.id.btnAudioON));
 	}
 	
-	private void refreshButtonImage(View view){
-		view.setBackground(getResources().getDrawable(
-				(mAudioON?R.drawable.ic_audio_off:R.drawable.ic_audio_on)
-				));	
+	@SuppressWarnings("deprecation")
+	private void refreshButtonImage(View view){		
+		
+		
+		int sdk = android.os.Build.VERSION.SDK_INT;
+		if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+		    Drawable background = getResources().getDrawable(
+					(mAudioON?R.drawable.ic_audio_off:R.drawable.ic_audio_on) );
+		    view.setBackgroundDrawable( background );
+		} else {
+			view.setBackground(getResources().getDrawable(
+					(mAudioON?R.drawable.ic_audio_off:R.drawable.ic_audio_on) ));
+		}
+		
 	}
 	
 	protected void stopAudio(){
@@ -82,8 +99,11 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	protected void startAudio(){
-		BluetoothManager.streamAudioStart(getApplicationContext());
-		mAudioON = true;
+		mAudioON = BluetoothManager.streamAudioStart(getApplicationContext());
+		//mAudioON = true;
+		if( !mAudioON ){
+			Toast.makeText(this, R.string.cannot_connect, Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	protected void toggleAudioStatus(){

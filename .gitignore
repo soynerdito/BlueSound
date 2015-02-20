@@ -7,6 +7,7 @@
 
 # Java class files
 *.class
+lib/*android-support-v4.jar
 
 # Generated files
 bin/

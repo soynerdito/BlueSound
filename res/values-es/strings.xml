@@ -3,4 +3,5 @@
        <string name="app_name">Sonido Mono Azul</string>
     <string name="action_settings">Configuracion</string>
     <string name="main_text">Sin anuncios, solo baja calidad de audio mono</string>
+    <string name="cannot_connect">No se pudo conectar a Bluetooth</string>
 </resources>

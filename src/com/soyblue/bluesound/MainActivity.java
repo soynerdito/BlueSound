@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
 	    filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
 	    filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED );
 	    filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED );
-	    filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED );	    
+	    filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED );
 	    		
 	    registerReceiver(mReceiver, filter);
 		

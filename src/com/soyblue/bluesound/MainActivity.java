@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 	private boolean mAudioON = false;
 	private final String AUDIO_STATUS = "AUDIO_STATUS";
+	final Handler mguiHandler = new Handler();
 
 	// The BroadcastReceiver that listens for Bluetooth broadcasts
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -36,13 +36,7 @@ public class MainActivity extends ActionBarActivity {
 				// Device found
 			} else if (mAudioON
 					&& BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-				// Device is now connected
-				AudioManager localAudioManager = (AudioManager) context
-						.getSystemService(Context.AUDIO_SERVICE);
-				/*
-				 * if( localAudioManager != null ){
-				 * localAudioManager.setMode(AudioManager.MODE_IN_CALL); }
-				 */
+				// Device is now connected				
 				refreshButtonImage();
 			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
 					.equals(action)) {
@@ -131,7 +125,7 @@ public class MainActivity extends ActionBarActivity {
 
 	private static final ScheduledExecutorService worker = Executors
 			.newSingleThreadScheduledExecutor();
-	final Handler myHandler = new Handler();
+	
 
 	private void delayAudioStart() {
 		Runnable task = new Runnable() {
@@ -139,7 +133,7 @@ public class MainActivity extends ActionBarActivity {
 				startAudio();
 
 				// Refresh UI
-				myHandler.post(new Runnable() {
+				mguiHandler.post(new Runnable() {
 					public void run() {
 						refreshButtonImage();
 					}

@@ -140,7 +140,7 @@ public class MainActivity extends ActionBarActivity {
 				});
 			}
 		};
-		worker.schedule(task, 1, TimeUnit.SECONDS);
+		worker.schedule(task, 250, TimeUnit.MILLISECONDS);
 	}
 
 	private void broadcastKey(int key, boolean restartAudio) {

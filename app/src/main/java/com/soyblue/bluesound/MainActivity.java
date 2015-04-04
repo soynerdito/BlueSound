@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
-	private boolean mAudioON = false;
+
 	private final String AUDIO_STATUS = "AUDIO_STATUS";
 	final Handler mguiHandler = new Handler();
 
@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				// Device found
-			} else if (mAudioON
+			} else if (BluetoothManager.getInstance().getStatus()
 					&& BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
 				// Device is now connected				
 				refreshButtonImage();
@@ -57,9 +57,6 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		if (savedInstanceState != null) {
-			mAudioON = savedInstanceState.getBoolean(AUDIO_STATUS);
-		}
 		refreshButtonImage();
 
 		// Register Intent Filter to identify when bluetooth device is
@@ -88,40 +85,32 @@ public class MainActivity extends ActionBarActivity {
 		int sdk = android.os.Build.VERSION.SDK_INT;
 		if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 			Drawable background = getResources().getDrawable(
-					(mAudioON ? R.drawable.ic_audio_off
+					(BluetoothManager.getInstance().getStatus() ? R.drawable.ic_audio_off
 							: R.drawable.ic_audio_on));
 			view.setBackgroundDrawable(background);
 		} else {
 			view.setBackground(getResources().getDrawable(
-					(mAudioON ? R.drawable.ic_audio_off
+					(BluetoothManager.getInstance().getStatus() ? R.drawable.ic_audio_off
 							: R.drawable.ic_audio_on)));
 		}
-
+		//Update App Widget
+		ControlWidget.requestWidgetUpdate(getApplicationContext());
 	}
 
 	protected void stopAudio() {
-		BluetoothManager.streamAudioStop(getApplicationContext());
-		mAudioON = false;
+		BluetoothManager.getInstance().streamAudioStop(getApplicationContext());
 	}
 
 	protected void startAudio() {
-		mAudioON = BluetoothManager.streamAudioStart(getApplicationContext());
+		BluetoothManager.getInstance().streamAudioStart(getApplicationContext());
 		// mAudioON = true;
-		if (!mAudioON) {
+		if (!BluetoothManager.getInstance().getStatus()) {
 			Toast.makeText(this, R.string.cannot_connect, Toast.LENGTH_SHORT)
 					.show();
 		}
 	}
 
-	protected void toggleAudioStatus() {
-		if (mAudioON) {
-			// Turn Audio Off
-			stopAudio();
-		} else {
-			// Turn Audio ON
-			startAudio();
-		}
-	}
+
 
 	private static final ScheduledExecutorService worker = Executors
 			.newSingleThreadScheduledExecutor();
@@ -176,13 +165,13 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void onStreamClick(View view) {
-		toggleAudioStatus();
+		BluetoothManager.getInstance().toggleAudioStatus( getApplicationContext() );
 		refreshButtonImage(view);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean(AUDIO_STATUS, mAudioON);
+		outState.putBoolean(AUDIO_STATUS, BluetoothManager.getInstance().getStatus());
 		super.onSaveInstanceState(outState);
 	}
 

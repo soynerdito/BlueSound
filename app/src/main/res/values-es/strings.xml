@@ -5,4 +5,6 @@
     <string name="main_text">Sin anuncios, solo baja calidad de audio mono</string>
     <string name="cannot_connect">No se pudo conectar a Bluetooth</string>
     <string name="how_to">Tocar audio primero y luego presionar boton!</string>
+    <string name="add_widget">Incluir Widget</string>
+    <string name="appwidget_text">Widget Azul</string>
 </resources>

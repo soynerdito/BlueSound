@@ -3,7 +3,7 @@
 
     <string name="app_name">Blue Mono Sound</string>
     <string name="action_settings">Settings</string>
-    <string name="main_text">No adds just crappy mono sound redirect</string>
+    <string name="main_text">No ads just crappy mono sound redirect</string>
 	<string name="cannot_connect">Cannot connect to bluetooth</string>
 	<string name="how_to">Play audio first then click the big button!</string>
     <string name="appwidget_text">Blue Widget</string>
